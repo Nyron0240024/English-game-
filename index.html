@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quest</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🎓</div>
+                <div>
+                    <h1>English Quest</h1>
+                    <p>Учись играя!</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <span class="offline-status">
+                    <span class="status-dot"></span>
+                    Офлайн-режим
+                </span>
+            </div>
+        </header>
+
+        <main class="main">
+
+            <!-- ГЛАВНАЯ СТРАНИЦА -->
+
+            <section id="home-section">
+
+                <section class="welcome">
+                    <div class="welcome-text">
+                        <span class="welcome-label">ENGLISH LEARNING GAME</span>
+                        <h2>Добро пожаловать<br>в English Quest!</h2>
+                        <p>Изучай английский, отвечай на вопросы и получай новые знания!</p>
+                    </div>
+                    <div class="welcome-emoji">🚀</div>
+                </section>
+
+                <section class="section">
+                    <h2>Что будем делать?</h2>
+
+                    <div class="menu-grid">
+
+                        <button class="menu-card play-card" onclick="showSection('play')">
+                            <div class="card-icon">🎮</div>
+                            <h3>Играть</h3>
+                            <p>Начать английскую викторину</p>
+                            <span>Начать →</span>
+                        </button>
+
+                        <button class="menu-card create-card" onclick="showSection('create')">
+                            <div class="card-icon">✏️</div>
+                            <h3>Создать тест</h3>
+                            <p>Создавай собственные задания</p>
+                            <span>Создать →</span>
+                        </button>
+
+                        <button class="menu-card tests-card" onclick="showSection('tests')">
+                            <div class="card-icon">📚</div>
+                            <h3>Мои тесты</h3>
+                            <p>Управляй своими тестами</p>
+                            <span>Открыть →</span>
+                        </button>
+
+                    </div>
+                </section>
+
+            </section>
+
+            <!-- СОЗДАНИЕ ТЕСТА -->
+
+            <section id="create-section" class="hidden">
+
+                <button class="back-button" onclick="goHome()">← На главную</button>
+
+                <div class="page-heading">
+                    <h2>✏️ Создание теста</h2>
+                    <p>Создай собственную английскую викторину</p>
+                </div>
+
+                <div class="editor-card">
+
+                    <label>Название теста</label>
+                    <input id="test-title" type="text" placeholder="Например: Fruits">
+
+                    <div class="divider"></div>
+
+                    <h3>Добавить вопрос</h3>
+
+                    <label>Вопрос на английском</label>
+                    <input id="question-text" type="text"
+                        placeholder="Which fruit is long and yellow?">
+
+                    <!-- ЗАГРУЗКА КАРТИНКИ -->
+
+                    <label>Картинка к вопросу (необязательно)</label>
+
+                    <input
+                        id="question-image"
+                        type="file"
+                        accept="image/*"
+                        onchange="previewQuestionImage(event)"
+                    >
+
+                    <div id="image-preview-box" class="image-preview-box hidden">
+                        <img id="question-image-preview" alt="Предпросмотр картинки">
+
+                        <button type="button"
+                            class="delete-button"
+                            onclick="removeQuestionImage()">
+                            🗑 Удалить картинку
+                        </button>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <label>Вариант 1</label>
+                    <input class="answer-input" type="text" placeholder="Apple">
+
+                    <label>Вариант 2</label>
+                    <input class="answer-input" type="text" placeholder="Banana">
+
+                    <label>Вариант 3</label>
+                    <input class="answer-input" type="text" placeholder="Orange">
+
+                    <label>Вариант 4</label>
+                    <input class="answer-input" type="text" placeholder="Strawberry">
+
+                    <label>Правильный ответ</label>
+
+                    <select id="correct-answer">
+                        <option value="0">Вариант 1</option>
+                        <option value="1">Вариант 2</option>
+                        <option value="2">Вариант 3</option>
+                        <option value="3">Вариант 4</option>
+                    </select>
+
+                    <button class="primary-button" onclick="addQuestion()">
+                        + Добавить вопрос
+                    </button>
+
+                    <div id="question-list"></div>
+
+                    <button class="save-button" onclick="saveTest()">
+                        💾 Сохранить тест
+                    </button>
+
+                </div>
+
+            </section>
+
+            <!-- МОИ ТЕСТЫ -->
+
+            <section id="tests-section" class="hidden">
+
+                <button class="back-button" onclick="goHome()">← На главную</button>
+
+                <div class="page-heading">
+                    <h2>📚 Мои тесты</h2>
+                    <p>Все твои сохранённые викторины</p>
+                </div>
+
+                <div id="tests-list"></div>
+
+            </section>
+
+            <!-- ИГРА -->
+
+            <section id="play-section" class="hidden">
+
+                <button class="back-button" onclick="goHome()">← На главную</button>
+
+                <div id="game-selection">
+
+                    <div class="page-heading">
+                        <h2>🎮 Начать игру</h2>
+                        <p>Выбери тест для своей группы</p>
+                    </div>
+
+                    <div class="editor-card">
+
+                        <label>Время на один вопрос</label>
+
+                        <select id="game-duration">
+                            <option value="10">10 секунд</option>
+                            <option value="15" selected>15 секунд</option>
+                            <option value="20">20 секунд</option>
+                            <option value="30">30 секунд</option>
+                        </select>
+
+                    </div>
+
+                    <div id="play-tests-list"></div>
+
+                </div>
+
+                <!-- ИГРОВОЙ ЭКРАН -->
+
+                <div id="game-container" class="hidden">
+
+                    <div class="game-top">
+                        <span id="game-title">ENGLISH QUEST</span>
+                        <span id="game-progress">Вопрос 1 / 5</span>
+                    </div>
+
+                    <div class="timer-box">
+
+                        <div class="timer-number" id="timer-number">15</div>
+
+                        <div class="timer-label">SECONDS LEFT</div>
+
+                        <div class="timer-track">
+                            <div id="timer-progress"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="game-question">
+
+                        <h2 id="game-question-text"></h2>
+
+                        <!-- КАРТИНКА ВО ВРЕМЯ ИГРЫ -->
+
+                        <div id="game-question-image"
+                            class="game-question-image hidden">
+
+                            <img id="game-image" alt="Иллюстрация к вопросу">
+
+                        </div>
+
+                    </div>
+
+                    <div id="game-answers" class="game-answers"></div>
+
+                    <div id="game-feedback" class="game-feedback hidden"></div>
+
+                    <div id="game-next-message" class="game-next-message hidden">
+                        Следующий вопрос через 3 секунды...
+                    </div>
+
+                </div>
+
+                <!-- РЕЗУЛЬТАТ -->
+
+                <div id="game-result" class="hidden"></div>
+
+            </section>
+
+        </main>
+
+        <footer>
+            English Quest © 2026 | Learning is fun!
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
