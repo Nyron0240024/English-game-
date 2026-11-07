@@ -853,3 +853,112 @@ if (document.readyState === "loading") {
 } else {
     renderVocabularySets();
 }
+// ============================================
+// VOCABULARY — FINAL DESIGN IMPROVEMENTS
+// ============================================
+
+// Убираем подсказку под словом
+function hideVocabularyHint() {
+    const hint = document.getElementById("vocabulary-card-hint");
+
+    if (hint) {
+        hint.style.display = "none";
+    }
+}
+
+// Обновляем карточку при каждом перевороте
+const previousVocabularyRenderer = renderVocabularyCard;
+
+renderVocabularyCard = function() {
+    previousVocabularyRenderer();
+    hideVocabularyHint();
+};
+
+
+// Красивый стиль кнопок Vocabulary
+const vocabularyDesign = document.createElement("style");
+
+vocabularyDesign.textContent = `
+    #vocabulary-study .editor-card button {
+        border-radius: 15px;
+        padding: 13px 23px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        border: 1px solid transparent;
+        box-shadow: 0 5px 12px rgba(75, 45, 150, 0.12);
+    }
+
+    #vocabulary-study .editor-card .primary-button {
+        background: linear-gradient(135deg, #8b5cf6, #6235d9);
+        color: white;
+        border: none;
+        box-shadow: 0 5px 15px rgba(105, 65, 220, 0.3);
+    }
+
+    #vocabulary-study .editor-card .edit-button {
+        background: linear-gradient(135deg, #ffffff, #f0ebff);
+        color: #5733a5;
+        border: 1px solid #d8ccff;
+    }
+
+    #vocabulary-study .editor-card button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 9px 20px rgba(95, 60, 180, 0.22);
+    }
+
+    #vocabulary-study .editor-card button:active {
+        transform: scale(0.96);
+    }
+
+    #vocabulary-study .editor-card button:focus-visible {
+        outline: 3px solid rgba(139, 92, 246, 0.35);
+        outline-offset: 3px;
+    }
+
+    #vocabulary-card {
+        border: 2px solid #e2d5ff;
+        box-shadow: 0 12px 30px rgba(100, 65, 180, 0.12);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    #vocabulary-card:hover {
+        box-shadow: 0 16px 35px rgba(100, 65, 180, 0.2);
+    }
+
+    #vocabulary-card-main {
+        color: #38206f;
+        font-weight: 800;
+    }
+
+    #vocabulary-card-label {
+        color: #7954ca;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    #vocabulary-card-example {
+        color: #6444a4;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+        #vocabulary-study .editor-card button {
+            padding: 11px 16px;
+            font-size: 14px;
+        }
+
+        #vocabulary-card {
+            min-height: 220px !important;
+        }
+    }
+`;
+
+document.head.appendChild(vocabularyDesign);
+
+
+// Убираем подсказку сразу после загрузки
+hideVocabularyHint();
