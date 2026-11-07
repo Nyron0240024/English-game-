@@ -69,10 +69,20 @@
                             <span>Открыть →</span>
                         </button>
 
+                        <!-- НОВЫЙ РАЗДЕЛ LISTENING -->
+
+                        <button class="menu-card listening-card" onclick="showSection('listening')">
+                            <div class="card-icon">🎧</div>
+                            <h3>Listening</h3>
+                            <p>Слушай английскую речь и выполняй задания</p>
+                            <span>Начать →</span>
+                        </button>
+
                     </div>
                 </section>
 
             </section>
+
 
             <!-- СОЗДАНИЕ ТЕСТА -->
 
@@ -97,8 +107,6 @@
                     <label>Вопрос на английском</label>
                     <input id="question-text" type="text"
                         placeholder="Which fruit is long and yellow?">
-
-                    <!-- ЗАГРУЗКА КАРТИНКИ -->
 
                     <label>Картинка к вопросу (необязательно)</label>
 
@@ -156,6 +164,7 @@
 
             </section>
 
+
             <!-- МОИ ТЕСТЫ -->
 
             <section id="tests-section" class="hidden">
@@ -171,7 +180,8 @@
 
             </section>
 
-            <!-- ИГРА -->
+
+            <!-- ИГРА QUIZ -->
 
             <section id="play-section" class="hidden">
 
@@ -201,6 +211,7 @@
 
                 </div>
 
+
                 <!-- ИГРОВОЙ ЭКРАН -->
 
                 <div id="game-container" class="hidden">
@@ -225,8 +236,6 @@
                     <div class="game-question">
 
                         <h2 id="game-question-text"></h2>
-
-                        <!-- КАРТИНКА ВО ВРЕМЯ ИГРЫ -->
 
                         <div id="game-question-image"
                             class="game-question-image hidden">
@@ -253,7 +262,314 @@
 
             </section>
 
+
+            <!-- НОВЫЙ РАЗДЕЛ LISTENING -->
+
+            <section id="listening-section" class="hidden">
+
+                <button class="back-button" onclick="goHome()">
+                    ← На главную
+                </button>
+
+
+                <!-- МЕНЮ LISTENING -->
+
+                <div id="listening-menu">
+
+                    <div class="page-heading">
+                        <h2>🎧 Listening</h2>
+                        <p>Развивай навыки аудирования на английском языке</p>
+                    </div>
+
+                    <div class="menu-grid">
+
+                        <button class="menu-card create-card"
+                            onclick="openListeningEditor()">
+
+                            <div class="card-icon">✏️</div>
+                            <h3>Создать аудирование</h3>
+                            <p>Добавь текст, вопросы и ответы</p>
+                            <span>Создать →</span>
+
+                        </button>
+
+                    </div>
+
+                    <div class="section">
+                        <h2>Мои аудирования</h2>
+                        <div id="listening-list"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- СОЗДАНИЕ LISTENING -->
+
+                <div id="listening-editor" class="hidden">
+
+                    <button class="back-button"
+                        onclick="backToListeningMenu()">
+                        ← Назад
+                    </button>
+
+                    <div class="page-heading">
+                        <h2>✏️ Создание Listening</h2>
+                        <p>Подготовь аудирование для своих учеников</p>
+                    </div>
+
+                    <div class="editor-card">
+
+                        <label>Название задания</label>
+
+                        <input
+                            id="listening-title"
+                            type="text"
+                            placeholder="Например: My Daily Routine"
+                        >
+
+                        <div class="divider"></div>
+
+                        <h3>🎙️ Текст для озвучки</h3>
+
+                        <p class="editor-description">
+                            Введи английский текст. Во время игры компьютер
+                            прочитает его голосом на английском языке.
+                        </p>
+
+                        <label>Английский текст</label>
+
+                        <textarea
+                            id="listening-text"
+                            rows="7"
+                            placeholder="Hello! My name is Tom. I am ten years old. I have a dog..."
+                        ></textarea>
+
+
+                        <label>Скорость голоса</label>
+
+                        <select id="listening-speed">
+                            <option value="0.7">Медленно</option>
+                            <option value="0.85" selected>Обычная</option>
+                            <option value="1">Быстро</option>
+                        </select>
+
+
+                        <div class="divider"></div>
+
+                        <h3>🖼️ Картинка (необязательно)</h3>
+
+                        <p class="editor-description">
+                            Можно добавить картинку к аудированию.
+                        </p>
+
+                        <input
+                            id="listening-image"
+                            type="file"
+                            accept="image/*"
+                            onchange="previewListeningImage(event)"
+                        >
+
+                        <div id="listening-image-preview-box"
+                            class="image-preview-box hidden">
+
+                            <img
+                                id="listening-image-preview"
+                                alt="Предпросмотр картинки"
+                            >
+
+                            <button
+                                type="button"
+                                class="delete-button"
+                                onclick="removeListeningImage()"
+                            >
+                                🗑 Удалить картинку
+                            </button>
+
+                        </div>
+
+
+                        <div class="divider"></div>
+
+                        <h3>❓ Вопросы к аудированию</h3>
+
+                        <p class="editor-description">
+                            Добавь вопросы, на которые дети будут отвечать
+                            на своих листочках.
+                        </p>
+
+                        <label>Вопрос</label>
+
+                        <input
+                            id="listening-question"
+                            type="text"
+                            placeholder="What is the boy's name?"
+                        >
+
+                        <label>Правильный ответ</label>
+
+                        <input
+                            id="listening-answer"
+                            type="text"
+                            placeholder="Tom"
+                        >
+
+                        <button
+                            type="button"
+                            class="primary-button"
+                            onclick="addListeningQuestion()"
+                        >
+                            + Добавить вопрос
+                        </button>
+
+                        <div id="listening-question-list"></div>
+
+
+                        <div class="divider"></div>
+
+                        <button
+                            type="button"
+                            class="save-button"
+                            onclick="saveListening()"
+                        >
+                            💾 Сохранить аудирование
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ПРОВЕДЕНИЕ LISTENING -->
+
+                <div id="listening-player" class="hidden">
+
+                    <button
+                        class="back-button"
+                        onclick="backToListeningMenu()"
+                    >
+                        ← Назад к аудированиям
+                    </button>
+
+                    <div class="page-heading">
+                        <h2 id="listening-player-title">
+                            🎧 Listening
+                        </h2>
+
+                        <p>
+                            Слушай внимательно и записывай ответы
+                            на своём листочке!
+                        </p>
+                    </div>
+
+
+                    <div class="editor-card listening-player-card">
+
+                        <div id="listening-player-image-box"
+                            class="image-preview-box hidden">
+
+                            <img
+                                id="listening-player-image"
+                                alt="Картинка к аудированию"
+                            >
+
+                        </div>
+
+
+                        <div class="listening-audio-panel">
+
+                            <div class="listening-audio-icon">🎧</div>
+
+                            <h3>Listen carefully!</h3>
+
+                            <p>
+                                Нажми кнопку, чтобы прослушать текст.
+                            </p>
+
+                            <div class="listening-audio-controls">
+
+                                <button
+                                    type="button"
+                                    class="primary-button"
+                                    onclick="playListeningAudio()"
+                                >
+                                    ▶ Воспроизвести
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="edit-button"
+                                    onclick="pauseListeningAudio()"
+                                >
+                                    ⏸ Пауза
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="edit-button"
+                                    onclick="repeatListeningAudio()"
+                                >
+                                    🔄 Повторить
+                                </button>
+
+                            </div>
+
+                            <p id="listening-audio-status"
+                                class="listening-audio-status">
+                                Готово к воспроизведению
+                            </p>
+
+                        </div>
+
+
+                        <div class="divider"></div>
+
+                        <div class="listening-task-heading">
+
+                            <h3>📝 Questions</h3>
+
+                            <p>
+                                Прослушай текст и ответь на вопросы
+                                на своём листочке.
+                            </p>
+
+                        </div>
+
+
+                        <div id="listening-player-questions"></div>
+
+
+                        <button
+                            type="button"
+                            class="save-button"
+                            id="listening-reveal-button"
+                            onclick="revealListeningAnswers()"
+                        >
+                            👁 Показать правильные ответы
+                        </button>
+
+
+                        <div
+                            id="listening-correct-answers"
+                            class="listening-correct-answers hidden"
+                        ></div>
+
+
+                        <button
+                            type="button"
+                            class="back-button"
+                            onclick="backToListeningMenu()"
+                        >
+                            Завершить аудирование
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
         </main>
+
 
         <footer>
             English Quest © 2026 | Learning is fun!
