@@ -12,7 +12,7 @@ body {
     min-height: 100vh;
 }
 
-button, input, select {
+button, input, select, textarea {
     font-family: inherit;
 }
 
@@ -156,6 +156,12 @@ button {
     background: #fff2e5;
 }
 
+/* LISTENING MENU CARD */
+
+.listening-card {
+    background: #eeeaff;
+}
+
 .card-icon {
     font-size: 35px;
     margin-bottom: 18px;
@@ -282,7 +288,8 @@ footer {
 }
 
 .editor-card input,
-.editor-card select {
+.editor-card select,
+.editor-card textarea {
     width: 100%;
     padding: 14px;
     border: 1px solid #dfe4ee;
@@ -290,10 +297,18 @@ footer {
     font-size: 15px;
     outline: none;
     background: #fafbfe;
+    color: #202b45;
+}
+
+.editor-card textarea {
+    resize: vertical;
+    min-height: 130px;
+    line-height: 1.6;
 }
 
 .editor-card input:focus,
-.editor-card select:focus {
+.editor-card select:focus,
+.editor-card textarea:focus {
     border-color: #6258e8;
     box-shadow: 0 0 0 3px rgba(98, 88, 232, 0.08);
 }
@@ -808,5 +823,219 @@ footer {
 
     .game-result-card h2:nth-of-type(2) {
         font-size: 38px;
+    }
+}
+
+
+/* =================================
+   LISTENING
+================================= */
+
+/* Поясняющий текст */
+
+.editor-description {
+    color: #8490a8;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+/* Карточка аудирования */
+
+.listening-player-card {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Панель аудио */
+
+.listening-audio-panel {
+    background: linear-gradient(145deg, #f4f2ff, #f8faff);
+    border: 1px solid #e8e5ff;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.listening-audio-icon {
+    font-size: 55px;
+    margin-bottom: 12px;
+}
+
+.listening-audio-panel h3 {
+    color: #30345a;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.listening-audio-panel > p {
+    color: #8490a8;
+    line-height: 1.6;
+}
+
+.listening-audio-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.listening-audio-controls button {
+    width: auto;
+    min-width: 140px;
+    margin: 0;
+}
+
+.listening-audio-status {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #6258e8;
+    font-weight: bold;
+}
+
+/* Вопросы Listening */
+
+.listening-task-heading {
+    margin-bottom: 20px;
+}
+
+.listening-task-heading h3 {
+    font-size: 23px;
+    margin-bottom: 8px;
+}
+
+.listening-task-heading p {
+    color: #8490a8;
+    line-height: 1.6;
+}
+
+.listening-question-item {
+    background: #f8f9fd;
+    border: 1px solid #e7eaf0;
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 13px;
+    line-height: 1.6;
+}
+
+.listening-question-item strong {
+    color: #303b58;
+    font-size: 16px;
+}
+
+.listening-question-item p {
+    color: #8490a8;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Правильные ответы */
+
+.listening-correct-answers {
+    background: #e9f9f0;
+    border: 1px solid #c8efd9;
+    border-radius: 16px;
+    padding: 22px;
+    margin-top: 20px;
+    animation: feedbackAppear 0.3s ease;
+}
+
+.listening-correct-answers h3 {
+    color: #13864e;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.listening-correct-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #d3eddd;
+    color: #285a40;
+    line-height: 1.5;
+}
+
+.listening-correct-item:last-child {
+    border-bottom: none;
+}
+
+.listening-correct-item strong {
+    color: #13864e;
+}
+
+/* Изображение Listening */
+
+#listening-player-image-box {
+    background: #f3f6fc;
+    margin-bottom: 20px;
+}
+
+#listening-player-image {
+    max-height: 300px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+/* Адаптация Listening */
+
+@media (max-width: 600px) {
+    .listening-audio-panel {
+        padding: 20px 15px;
+    }
+
+    .listening-audio-panel h3 {
+        font-size: 21px;
+    }
+
+    .listening-audio-controls {
+        flex-direction: column;
+    }
+
+    .listening-audio-controls button {
+        width: 100%;
+    }
+
+    .listening-question-item {
+        padding: 14px;
+    }
+}
+
+/* Большой экран / телевизор */
+
+@media (min-width: 1200px) {
+    .listening-player-card {
+        max-width: 1050px;
+        padding: 40px;
+    }
+
+    .listening-audio-panel {
+        padding: 40px;
+    }
+
+    .listening-audio-icon {
+        font-size: 70px;
+    }
+
+    .listening-audio-panel h3 {
+        font-size: 30px;
+    }
+
+    .listening-task-heading h3 {
+        font-size: 28px;
+    }
+
+    .listening-question-item {
+        padding: 22px;
+        font-size: 20px;
+    }
+
+    .listening-question-item strong {
+        font-size: 21px;
+    }
+
+    .listening-correct-item {
+        font-size: 20px;
     }
 }
