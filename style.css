@@ -1039,3 +1039,14 @@ footer {
         font-size: 20px;
     }
 }
+
+/* Яркое выделение выбранного ответа */
+.game-answer.selected:not(.correct):not(.wrong),
+.game-answer.selected:not(.correct):not(.wrong):hover {
+    background: #6258e8 !important;
+    border-color: #4e45d3 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 4px rgba(98, 88, 232, 0.18);
+    transform: translateY(-2px);
+}
+
