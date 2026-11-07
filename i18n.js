@@ -65,7 +65,6 @@ const translations = {
     "Правильный ответ": "To‘g‘ri javob",
     "Сохранить тест": "Testni saqlash",
     "Сохранить изменения теста": "Testdagi o‘zgarishlarni saqlash",
-    "Мои тесты": "Testlarim",
     "Все твои сохранённые викторины": "Barcha saqlangan testlaringiz",
     "Выбери тест для своей группы": "Guruhingiz uchun testni tanlang",
     "Время на один вопрос": "Har bir savol uchun vaqt",
@@ -118,10 +117,7 @@ const translations = {
     "Вопросы к аудированию": "Listening savollari",
     "Добавь вопросы, на которые дети будут отвечать на своих листочках.":
         "Bolalar javob berishi uchun savollar qo‘shing.",
-    "Вопрос": "Savol",
     "Ответ": "Javob",
-    "Правильный ответ": "To‘g‘ri javob",
-    "Добавить вопрос": "Savol qo‘shish",
     "Сохранить аудирование": "Listening topshirig‘ini saqlash",
     "Мои аудирования": "Listening topshiriqlarim",
     "Слушай внимательно и записывай ответы на своём листочке!":
@@ -228,7 +224,6 @@ const vocabularyTranslationsUz = {
     "автобус": "avtobus",
     "один": "bir",
     "два": "ikki",
-
     "завтрак": "nonushta",
     "обед": "tushlik",
     "ужин": "kechki ovqat",
@@ -279,7 +274,6 @@ const vocabularyTranslationsUz = {
     "испытывающий жажду": "chanqagan",
     "интересный": "qiziqarli",
     "важный": "muhim",
-
     "достижение": "yutuq",
     "совет": "maslahat",
     "преимущество": "afzallik",
@@ -329,7 +323,6 @@ const vocabularyTranslationsUz = {
     "уменьшать": "kamaytirmoq",
     "требовать": "talab qilmoq",
     "поддерживать": "qo‘llab-quvvatlamoq",
-
     "анализ": "tahlil",
     "подход": "yondashuv",
     "предположение": "taxmin",
@@ -386,11 +379,12 @@ const vocabularyTranslationsUz = {
 // ==========================================
 
 const originalTextNodes = new WeakMap();
+const lastAppliedText = new WeakMap();
 const originalAttributes = new WeakMap();
+const lastAppliedAttributes = new WeakMap();
 
 function translateText(value) {
     const trimmed = value.trim();
-
     if (!trimmed) return value;
 
     let translated = translations[trimmed];
@@ -399,10 +393,9 @@ function translateText(value) {
         translated = vocabularyTranslationsUz[trimmed];
     }
 
-    if (!translated) {
+    if (!translated && currentLanguage === "uz") {
         const questionMatch = trimmed.match(/^Вопрос (\d+) \/ (\d+)$/);
-
-        if (questionMatch && currentLanguage === "uz") {
+        if (questionMatch) {
             translated = `Savol ${questionMatch[1]} / ${questionMatch[2]}`;
         }
     }
@@ -417,16 +410,28 @@ function translateText(value) {
 
 function translateNode(node) {
     if (node.nodeType === Node.TEXT_NODE) {
-        if (!originalTextNodes.has(node)) {
-            originalTextNodes.set(node, node.nodeValue);
+        const currentValue = node.nodeValue;
+        const lastValue = lastAppliedText.get(node);
+
+        if (
+            !originalTextNodes.has(node) ||
+            (lastValue !== undefined && currentValue !== lastValue)
+        ) {
+            originalTextNodes.set(node, currentValue);
         }
 
         const original = originalTextNodes.get(node);
-
-        node.nodeValue =
+        const nextValue =
             currentLanguage === "ru"
                 ? original
                 : translateText(original);
+
+        if (currentValue !== nextValue) {
+            node.nodeValue = nextValue;
+        }
+
+        lastAppliedText.set(node, nextValue);
+        return;
     }
 
     if (node.nodeType === Node.ELEMENT_NODE) {
@@ -435,25 +440,41 @@ function translateNode(node) {
         attributes.forEach(attribute => {
             if (!node.hasAttribute(attribute)) return;
 
-            let saved = originalAttributes.get(node);
+            let originals = originalAttributes.get(node);
 
-            if (!saved) {
-                saved = {};
-                originalAttributes.set(node, saved);
+            if (!originals) {
+                originals = {};
+                originalAttributes.set(node, originals);
             }
 
-            if (!(attribute in saved)) {
-                saved[attribute] = node.getAttribute(attribute);
+            let applied = lastAppliedAttributes.get(node);
+
+            if (!applied) {
+                applied = {};
+                lastAppliedAttributes.set(node, applied);
             }
 
-            const original = saved[attribute];
+            const currentValue = node.getAttribute(attribute);
 
-            node.setAttribute(
-                attribute,
+            if (
+                !(attribute in originals) ||
+                (attribute in applied && currentValue !== applied[attribute])
+            ) {
+                originals[attribute] = currentValue;
+            }
+
+            const original = originals[attribute];
+
+            const nextValue =
                 currentLanguage === "ru"
                     ? original
-                    : translateText(original)
-            );
+                    : translateText(original);
+
+            if (currentValue !== nextValue) {
+                node.setAttribute(attribute, nextValue);
+            }
+
+            applied[attribute] = nextValue;
         });
 
         node.childNodes.forEach(translateNode);
@@ -465,8 +486,8 @@ function applyLanguage() {
         currentLanguage === "uz" ? "uz" : "ru";
 
     translateNode(document.body);
-
     updateLanguageButtons();
+
     localStorage.setItem(I18N_STORAGE_KEY, currentLanguage);
 }
 
@@ -483,7 +504,6 @@ function createLanguageSwitcher() {
     }
 
     const wrapper = document.createElement("div");
-
     wrapper.id = "language-switcher";
 
     wrapper.innerHTML = `
@@ -566,7 +586,6 @@ function setLanguage(language) {
     if (!["ru", "uz"].includes(language)) return;
 
     currentLanguage = language;
-
     applyLanguage();
 }
 
@@ -601,11 +620,18 @@ window.confirm = function(message) {
 
 const languageObserver = new MutationObserver(records => {
     records.forEach(record => {
-        if (record.type === "childList") {
-            record.addedNodes.forEach(translateNode);
+        if (
+            record.target &&
+            record.target.nodeType === Node.ELEMENT_NODE &&
+            record.target.closest &&
+            record.target.closest("#language-switcher")
+        ) {
+            return;
         }
 
-        if (record.type === "characterData") {
+        if (record.type === "childList") {
+            record.addedNodes.forEach(translateNode);
+        } else if (record.type === "characterData") {
             translateNode(record.target);
         }
     });
