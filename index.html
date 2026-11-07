@@ -77,6 +77,12 @@
                             <p>Слушай английскую речь и выполняй задания</p>
                             <span>Начать →</span>
                         </button>
+                        <button class="menu-card create-card" onclick="showSection('vocabulary')">
+    <div class="card-icon">📖</div>
+    <h3>Vocabulary</h3>
+    <p>Изучай английские слова и переводы</p>
+    <span>Изучать →</span>
+</button>
 
                     </div>
                 </section>
@@ -571,6 +577,178 @@
                 </div>
 
             </section>
+            <!-- VOCABULARY -->
+
+<section id="vocabulary-section" class="hidden">
+
+    <button class="back-button" onclick="goHome()">
+        ← На главную
+    </button>
+
+    <!-- MENU -->
+
+    <div id="vocabulary-menu">
+
+        <div class="page-heading">
+            <h2>📖 Vocabulary</h2>
+            <p>Изучай новые английские слова!</p>
+        </div>
+
+        <button class="primary-button"
+            onclick="openVocabularyEditor()">
+            + Создать набор слов
+        </button>
+
+        <div class="section">
+            <h2>Мои наборы слов</h2>
+            <div id="vocabulary-list"></div>
+        </div>
+
+    </div>
+
+    <!-- EDITOR -->
+
+    <div id="vocabulary-editor" class="hidden">
+
+        <button class="back-button"
+            onclick="backToVocabularyMenu()">
+            ← Назад
+        </button>
+
+        <div class="page-heading">
+            <h2 id="vocabulary-editor-heading">Создание набора</h2>
+        </div>
+
+        <div class="editor-card">
+
+            <label>Название набора</label>
+            <input id="vocabulary-title"
+                type="text"
+                placeholder="Например: Fruits">
+
+            <div class="divider"></div>
+
+            <h3>Добавить слово</h3>
+
+            <label>English word</label>
+            <input id="vocabulary-word"
+                type="text"
+                placeholder="Apple">
+
+            <label>Перевод</label>
+            <input id="vocabulary-translation"
+                type="text"
+                placeholder="Яблоко">
+
+            <label>Пример предложения (необязательно)</label>
+            <input id="vocabulary-example"
+                type="text"
+                placeholder="I like apples.">
+
+            <button class="primary-button"
+                onclick="addVocabularyWord()">
+                + Добавить слово
+            </button>
+
+            <button id="vocabulary-cancel-edit"
+                class="edit-button hidden"
+                onclick="cancelVocabularyWordEdit()">
+                Отменить редактирование
+            </button>
+
+            <div id="vocabulary-word-list"></div>
+
+            <div class="divider"></div>
+
+            <button class="save-button"
+                onclick="saveVocabularySet()">
+                💾 Сохранить набор
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- STUDY CARDS -->
+
+    <div id="vocabulary-study" class="hidden">
+
+        <button class="back-button"
+            onclick="backToVocabularyMenu()">
+            ← Назад к наборам
+        </button>
+
+        <div class="page-heading">
+            <h2 id="vocabulary-study-title">Vocabulary</h2>
+            <p id="vocabulary-study-progress"></p>
+        </div>
+
+        <div class="editor-card" style="text-align:center;">
+
+            <div id="vocabulary-card"
+                onclick="flipVocabularyCard()"
+                style="
+                    min-height:260px;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:center;
+                    align-items:center;
+                    background:#f0edff;
+                    border-radius:20px;
+                    padding:30px;
+                    cursor:pointer;
+                    margin-bottom:20px;
+                ">
+
+                <p id="vocabulary-card-label">ENGLISH WORD</p>
+
+                <h1 id="vocabulary-card-main"
+                    style="font-size:40px;">
+                    Apple
+                </h1>
+
+                <p id="vocabulary-card-example"></p>
+
+                <p id="vocabulary-card-hint">
+                    Нажми, чтобы увидеть перевод
+                </p>
+
+            </div>
+
+            <div style="
+                display:flex;
+                justify-content:center;
+                flex-wrap:wrap;
+                gap:10px;
+            ">
+
+                <button class="edit-button"
+                    onclick="previousVocabularyCard()">
+                    ← Назад
+                </button>
+
+                <button class="primary-button"
+                    onclick="flipVocabularyCard()">
+                    Перевернуть
+                </button>
+
+                <button class="edit-button"
+                    onclick="nextVocabularyCard()">
+                    Далее →
+                </button>
+
+                <button class="edit-button"
+                    onclick="shuffleVocabularyCards()">
+                    🔀 Перемешать
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
         </main>
 
