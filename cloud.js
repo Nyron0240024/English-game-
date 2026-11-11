@@ -71,6 +71,42 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_-KydAWjq0s4Cq3gohiGNVw_evnz8K7W
         tests = Array.isArray(data.tests) ? data.tests : [];
         listeningItems = Array.isArray(data.listening) ? data.listening : [];
         vocabularySets = Array.isArray(data.vocabulary) ? data.vocabulary : [];
+
+        // Apply the new built-in CEFR library while preserving teacher-created content.
+        const curriculum = window.ENGLISH_QUEST_CURRICULUM;
+        if (curriculum && curriculum.version === 2) {
+            const oldVocabularyIds = new Set(curriculum.replaceVocabularyIds.map(Number));
+            const newVocabularyIds = new Set(curriculum.vocabulary.map(item => Number(item.id)));
+            vocabularySets = vocabularySets.filter(item =>
+                !oldVocabularyIds.has(Number(item.id)) && !newVocabularyIds.has(Number(item.id))
+            );
+            const builtInVocabulary = curriculum.vocabulary.map(set => ({
+                id: set.id,
+                title: set.title,
+                words: set.words.map(word => ({
+                    word: word[0], translation: word[1], example: word[2],
+                    image: typeof vocabularyEmojiImage === "function" ? vocabularyEmojiImage(word[3]) : "",
+                    emoji: word[3]
+                }))
+            }));
+            vocabularySets.push(...builtInVocabulary);
+
+            const oldTestIds = new Set(curriculum.replaceTestIds.map(Number));
+            const newTestIds = new Set(curriculum.tests.map(item => Number(item.id)));
+            tests = tests.filter(item =>
+                !oldTestIds.has(Number(item.id)) && !newTestIds.has(Number(item.id))
+            );
+            const builtInTests = curriculum.tests.map(test => ({
+                id: test.id,
+                title: test.title,
+                questions: test.questions.map(question => ({
+                    ...question,
+                    answers: [...question.answers]
+                }))
+            }));
+            tests.push(...builtInTests);
+        }
+
         localStorage.setItem("english-quest-tests", JSON.stringify(tests));
         localStorage.setItem("english-quest-listening", JSON.stringify(listeningItems));
         localStorage.setItem("english-quest-vocabulary", JSON.stringify(vocabularySets));
@@ -156,6 +192,8 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_-KydAWjq0s4Cq3gohiGNVw_evnz8K7W
         }
 
         cloudReady = true;
+        // Persist curriculum replacement/upgrade to the teacher's cloud record.
+        await writeCloud();
         login.style.display = "none";
         if (app) app.style.display = "block";
         addCloudControls();
