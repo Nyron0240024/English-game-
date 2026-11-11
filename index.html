@@ -83,6 +83,12 @@
     <p>Изучай английские слова и переводы</p>
     <span>Изучать →</span>
 </button>
+                        <button class="menu-card wheel-menu-card" onclick="showSection('lucky-wheel')">
+                            <div class="card-icon">🎡</div>
+                            <h3>Lucky Wheel</h3>
+                            <p>Крути колесо и выполняй весёлые задания</p>
+                            <span>Играть →</span>
+                        </button>
 
                     </div>
                 </section>
@@ -750,6 +756,77 @@
 
 </section>
 
+
+            <!-- LUCKY WHEEL -->
+            <section id="lucky-wheel-section" class="hidden">
+                <button class="back-button" onclick="goHome()">← На главную</button>
+                <div class="page-heading wheel-heading">
+                    <h2>🎡 Lucky Wheel — Колесо удачи</h2>
+                    <p>Крути колесо, отвечай на задания и зарабатывай баллы для своей команды!</p>
+                </div>
+
+                <div class="wheel-toolbar">
+                    <label>Возрастная группа
+                        <select id="wheel-age" onchange="resetLuckyWheel()">
+                            <option value="young">2–4 класс</option>
+                            <option value="older">5–7 класс</option>
+                        </select>
+                    </label>
+                    <label>Набор заданий
+                        <select id="wheel-pack" onchange="resetLuckyWheel()">
+                            <option value="mixed">Все темы</option>
+                            <option value="vocabulary">Vocabulary</option>
+                            <option value="grammar">Grammar</option>
+                            <option value="speaking">Speaking</option>
+                        </select>
+                    </label>
+                    <button class="wheel-small-button" onclick="resetLuckyWheel()">↻ Сбросить игру</button>
+                </div>
+
+                <div class="wheel-layout">
+                    <div class="wheel-stage">
+                        <div class="wheel-pointer">▼</div>
+                        <canvas id="lucky-wheel-canvas" width="620" height="620" aria-label="Колесо удачи"></canvas>
+                        <button id="wheel-spin-button" class="wheel-spin-button" onclick="spinLuckyWheel()">КРУТИТЬ!</button>
+                        <p class="wheel-hint">Нажми кнопку, чтобы выбрать случайную тему</p>
+                    </div>
+
+                    <div class="wheel-side-panel">
+                        <div class="wheel-scoreboard">
+                            <h3>🏆 Счёт команд</h3>
+                            <div class="wheel-team-row team-one">
+                                <div><strong>🔵 Команда 1</strong><span id="wheel-score-one">0 баллов</span></div>
+                                <div class="wheel-team-actions">
+                                    <button onclick="changeWheelScore(1, -1)" aria-label="Уменьшить счёт первой команды">−</button>
+                                    <button onclick="changeWheelScore(1, 1)" aria-label="Увеличить счёт первой команды">+</button>
+                                </div>
+                            </div>
+                            <div class="wheel-team-row team-two">
+                                <div><strong>🟣 Команда 2</strong><span id="wheel-score-two">0 баллов</span></div>
+                                <div class="wheel-team-actions">
+                                    <button onclick="changeWheelScore(2, -1)" aria-label="Уменьшить счёт второй команды">−</button>
+                                    <button onclick="changeWheelScore(2, 1)" aria-label="Увеличить счёт второй команды">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="wheel-task-card" class="wheel-task-card">
+                            <div class="wheel-task-label">ТВОЁ ЗАДАНИЕ</div>
+                            <div class="wheel-task-emoji">✨</div>
+                            <h3>Готовы играть?</h3>
+                            <p>Крути колесо — оно выберет тему и покажет готовое задание.</p>
+                        </div>
+                        <div class="wheel-task-actions">
+                            <button id="wheel-answer-button" class="wheel-answer-button" onclick="revealWheelAnswer()" disabled>Показать ответ</button>
+                            <button id="wheel-correct-button" class="wheel-correct-button" onclick="awardWheelPoint(1)" disabled>✓ Команда 1</button>
+                            <button id="wheel-correct-two-button" class="wheel-correct-button team-two-button" onclick="awardWheelPoint(2)" disabled>✓ Команда 2</button>
+                            <button id="wheel-next-button" class="wheel-next-button" onclick="nextWheelTask()" disabled>Следующее задание →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="wheel-teacher-note">💡 Учитель читает задание с телевизора. Дети отвечают вслух, а учитель начисляет баллы с ноутбука.</div>
+            </section>
+
         </main>
 
 
@@ -764,6 +841,7 @@
     <script src="vocabulary.js"></script>
     <script src="i18n.js"></script>
     <script src="cloud.js"></script>
+    <script src="lucky-wheel.js"></script>
 
 </body>
 </html>
